@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="author" content="Szwarc" />
+  <link rel="shortcut icon" href="#" /> <!-- Usunięcie favicion error, nie do celów produkcyjncyh  -->
+  <title>Digi Task 2</title>
+
+  <link rel="stylesheet" href="./style/queryView.css">
+  <link rel="stylesheet" href="./style/displayView.css"> 
+</head>
+
+<body>
+  <div class="navbar">
+    <button id="toogleViewButton" class="main-button" >Toggle View</button>
+  </div>
+
+	<div id='queryView'>
+    <form id="searchMarsRoversCapturedPhotos" name="searchMarsRoversCapturedPhotos" action="" novalidate>
+
+      <div class="formField">
+        <label for="takenDateFrom">
+          Date from:<span class="required">*</span>
+        </label>
+        <input name="takenDateFrom" type="date"  class="input-field" 
+        placeholder="John"
+        required>
+        <div class="errorMessage"></div>
+      </div>
+      
+      <div class="formField">
+        <label for="takenDateTo">
+          Date To:<span class="required">*</span>
+        </label>
+        <input name="takenDateTo" type="date" class="input-field" required>
+        <div class="errorMessage"></div>
+      </div>
+
+      <div class="formField">
+        <label for="roverType">
+          Rover:<span class="required">*</span>
+        </label>
+        <select multiple
+          name="roverType"
+          class="input-field" 
+          required
+          >
+        </select>
+        <div class="errorMessage"></div>
+      </div>
+
+      <div class="formField">
+        <label for="cameraType">
+          Camera:<span class="required">*</span>
+        </label>
+        <select multiple
+          name="cameraType" 
+          class="input-field" 
+          required
+          >
+        </select>
+        <div class="errorMessage"></div>
+      </div>
+
+    </form>
+
+      <div class="formField">
+            <button id="searchMarsRoversCapturedPhotosFormSubmitButton" class="main-button" >Submit</button>
+      </div>
+    
+
+	</div>
+
+
+  <div id='showView'>
+    <div id='select-images-grid' class="mrp-images-grid">
+
+    </div>
+
+    <div class="basket-container">
+      <div class="basket-button-container">
+        <button id="checkout-basket-button" class="main-button" disabled>Checkout</button>
+        <button id="clear-basket-button" class="main-button" disabled>Remove All</button>
+        <button id="open-basket-button" class="main-button">Show Basket</button>
+      </div>
+      <div id="basket" class="basket">
+        <div id="basket-images-grid" class="mrp-images-grid"></div>
+      </div>
+    </div>
+
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <!-- <span class="modal-close">&times;</span> -->
+        <img >
+      </div>
+    </div>
+  </div>
+  
+  <script type="text/javascript" src="./scripts/config.js"></script>
+  <script type="text/javascript" src="./scripts/initial.js"></script>
+	<script type="text/javascript" src="./scripts/index.js"></script>
+  
+</body>
