@@ -1,29 +1,37 @@
 'use strict';
 
-window.addEventListener('DOMContentLoaded', (event) => {
-    // dodanie obslugi formualrza dla rpzycisku submit
-    document.getElementById('searchMarsRoversCapturedPhotosFormSubmitButton').addEventListener(
-        'click', 
-        valdiateForm
-    );
+document.getElementById('searchMarsRoversCapturedPhotosFormSubmitButton').addEventListener(
+    'click', 
+    valdiateForm
+);
 
-    // dodanie eventu do przelaczania pomiedzy stronami
-    document.getElementById('toogleViewButton').addEventListener(
-        'click', 
-        async (e) => {
-            e.target.setAttribute('disabled',"");
-            toggleViews()
-            .then( () => e.target.removeAttribute('disabled') );
-        }, false
-    );
-});
+// dodanie eventu do przelaczania pomiedzy stronami
+document.getElementById('toogleViewButton').addEventListener(
+    'click', 
+    async (e) => {
+        e.target.setAttribute('disabled',"");
+        toggleViews()
+        .then( () => e.target.removeAttribute('disabled') );
+    }, false
+); 
 
-const modalElement = document.getElementById('myModal');
-const img = modalElement.firstElementChild.lastElementChild;
-function openModal(url) {
-    modalElement.style.display = 'flex';
-    img.src = url;   
-}
+const openModal = function () {
+    const showView = document.getElementById('showView');
+    const modalElement = document.getElementById('myModal');
+    const img = modalElement.firstElementChild.firstElementChild;
+
+    const openModal = (url) => {
+        modalElement.style.display = 'block';
+        showView.classList.add('blur');
+        img.src = url;
+    }
+    modalElement.addEventListener('click', (e) => {
+        modalElement.style.display = "none";
+        showView.classList.remove('blur');
+    },false)
+
+    return openModal;
+}();
 
 // funkcja sprawdzajaca poprawnosc formualrza
 function valdiateForm() {
@@ -151,7 +159,7 @@ const [addToBasket,removeFromBasket] = function () {
         let mrpImageElement = e.target.parentElement;
         const mrpCheckboxElement = mrpImageElement.firstElementChild;
         mrpImageElement = mrpImageElement.parentElement.removeChild(mrpImageElement);
-        mrpCheckboxElement.setAttribute('checked','');
+        mrpCheckboxElement.innerHTML = 'check_circle';
         mrpCheckboxElement.insertAdjacentHTML(
             'afterend',
             `<span class="custom-control-container">
@@ -173,13 +181,13 @@ function displayLazyLoadingBoxes(e) {
     e.target.parentElement.style.display = "block";
 }
 // dodanie obrazow pobranych z MRP api do siatki
-function appendImagesToGrid(imagesArray) {
+function lazyAppendImagesToGrid(imagesArray) {
     const selectImagesGrid = document.getElementById('select-images-grid');
     
     imagesArray.forEach( (el) => {
         const mainDiv = document.createElement('div');
         mainDiv.insertAdjacentHTML('beforeend',
-            `<span class="custom-checkbox"></span>
+            `<span><span class="material-icons custom-checkbox">radio_button_unchecked</span></span>
             <p>${el.name}</p>
             <p>${el.earth_date}</p>`
         );
@@ -193,11 +201,17 @@ function appendImagesToGrid(imagesArray) {
             bgImg = null;
         };
         bgImg.src = el.img_src;
-        mainDiv.onclick = () => openModal(el.img_src) ;
+        mainDiv.onclick = () => { 
+            openModal(el.img_src); 
+        };
         mainDiv.firstElementChild.onclick = addToBasket;
 
         selectImagesGrid.appendChild(mainDiv);
     })
+}
+
+function lazyRemoveImagesFromGrid(params) {
+    
 }
 
 
@@ -279,7 +293,7 @@ const processQueryForMRPApi = function (appendImagesToGridFunction) {
             });
         }
     }
-}(appendImagesToGrid)
+}(lazyAppendImagesToGrid)
 
 
 // animacja przejscia pomiedzy formualrzem a kalendarzem

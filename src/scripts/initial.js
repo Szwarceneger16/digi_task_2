@@ -42,18 +42,6 @@
     // });
 }
 
-// obsluga modala
-{
-    const modal = document.getElementById("myModal");
-    // modal.getElementsByClassName('modal-close')[0].addEventListener('click', (e) => {
-    //     e.preventDefault();
-    //     modal.style.display = "none";
-    // },false)
-
-    modal.addEventListener('click', (e) => {
-        modal.style.display = "none";
-    },false)
-}
 
 {
     // const selectImagesGrid = document.getElementById('selectImagesGrid');
