@@ -7,7 +7,7 @@
   <meta name="author" content="Szwarc" />
   <link rel="shortcut icon" href="#" /> <!-- Usunięcie favicion error, nie do celów produkcyjncyh  -->
   <title>Digi Task 2</title>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
 
   <link rel="stylesheet" href="./style/queryView.css">
   <link rel="stylesheet" href="./style/displayView.css"> 
@@ -18,7 +18,7 @@
     <button id="toogleViewButton" class="main-button" >Toggle View</button>
   </div>
 
-	<div id='queryView'>
+	<div id='queryView' >
     <form id="searchMarsRoversCapturedPhotos" name="searchMarsRoversCapturedPhotos" action="" novalidate>
 
       <div class="formField">
@@ -75,15 +75,15 @@
 	</div>
 
 
-  <div id='showView'>
+  <div id='showView' >
     <div id='select-images-grid' class="mrp-images-grid">
 
     </div>
 
     <div class="basket-container">
       <div class="basket-button-container">
-        <button id="checkout-basket-button" class="main-button" disabled>Checkout</button>
-        <button id="clear-basket-button" class="main-button" disabled>Remove All</button>
+        <button id="checkout-basket-button" class="main-button" >Checkout</button>
+        <button id="clear-basket-button" class="main-button" >Remove All</button>
         <button id="open-basket-button" class="main-button">Show Basket</button>
       </div>
       <div id="basket" class="basket">
@@ -98,6 +98,10 @@
       <!-- <span class="modal-close">&times;</span> -->
       <img >
     </div>
+  </div>
+
+  <div id="screen-saver-container-1" class="screen-saver-container" style="display: none;">
+
   </div>
   
   <script type="text/javascript" src="./scripts/config.js"></script>

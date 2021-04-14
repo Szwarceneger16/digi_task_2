@@ -14,14 +14,13 @@ body {
 	color: #fff;
 	box-shadow: 1px 1px 4px #DADADA;
 	border-radius: 3px;
-	font-size: 24px;
+	font-size: 20px;
 }
 
 @media only screen and (min-width: 600px) {
 	.main-button {
 		font-size: 16px;
 	}
-	
 }
 
 .main-button:disabled {

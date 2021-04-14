@@ -74,16 +74,6 @@ const [addToBasket,removeFromBasket] = function () {
     let blockAddingToBasket = false;
     window.basketElementsCounter = basketElementsCounter;
 
-    const takeFromBasketToSelectGrid = (mrpCheckboxElement) => {
-        countBasketElments(-1);
-        let mrpImageElement = mrpCheckboxElement.parentElement;
-        mrpImageElement = mrpImageElement.parentElement.removeChild(mrpImageElement);
-        mrpCheckboxElement.removeAttribute('checked');
-        mrpCheckboxElement.onclick = handleCustomCheckBoxCheck;
-        mrpImageElement.removeChild(mrpCheckboxElement.nextElementSibling);
-        selectImagesGrid.appendChild(mrpImageElement);
-    }
-
     const moveForwardMRPElementInBasket = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -112,9 +102,18 @@ const [addToBasket,removeFromBasket] = function () {
         basketImagesGrid.insertBefore(movedElement,newNextSiblingElement);
     }
 
+    checkoutBusketButton.onclick = (e) => {
+        lazyRemoveImagesFromGrid(selectImagesGrid);
+        const imagesUrl = Array.from(basketImagesGrid.children).map( (el) => {
+            return el.style.backgroundImage.slice(5,-2);
+        })
+        lazyRemoveImagesFromGrid(basketImagesGrid);
+        startScreenSaver(imagesUrl);
+    }
+
     clearBusketButton.onclick = (e) => {
         Array.from(basketImagesGrid.children).forEach( (element) => {
-            takeFromBasketToSelectGrid(element.firstElementChild);
+            takeFromBasketToSelectGrid(element.firstElementChild.firstElementChild);
             
         })
         checkoutBusketButton.setAttribute('disabled',"");
@@ -129,7 +128,7 @@ const [addToBasket,removeFromBasket] = function () {
             if ( direction < 0) return;
 
             clearBusketButton.removeAttribute('disabled');
-        }else if (basketElementsCounter === 9) {
+        }else if (basketElementsCounter === numberOfImagesToStartGrid - 1) {
             blockAddingToBasket = true;
             checkoutBusketButton.removeAttribute('disabled');
         }
@@ -138,12 +137,23 @@ const [addToBasket,removeFromBasket] = function () {
         
         if (basketElementsCounter === 0) {
             clearBusketButton.setAttribute('disabled',"");
-        } else if (basketElementsCounter === 9) {
+        } else if (basketElementsCounter === numberOfImagesToStartGrid - 1) {
             blockAddingToBasket = false;
             checkoutBusketButton.setAttribute('disabled',"");
         }
     } 
 
+    const takeFromBasketToSelectGrid = (mrpCheckboxElement) => {
+        countBasketElments(-1);
+        let mrpImageElement = mrpCheckboxElement.parentElement.parentElement;
+        mrpImageElement = mrpImageElement.parentElement.removeChild(mrpImageElement);
+        mrpCheckboxElement.src = "./img/radio_button_unchecked.svg";
+        //debugger;
+        mrpCheckboxElement.onclick = handleCustomCheckBoxCheck;
+        mrpImageElement.firstElementChild.removeChild(mrpCheckboxElement.nextElementSibling);
+        mrpImageElement.firstElementChild.removeChild(mrpCheckboxElement.nextElementSibling);
+        selectImagesGrid.appendChild(mrpImageElement);
+    }
     const handleCustomCheckBoxUncheck = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -156,18 +166,18 @@ const [addToBasket,removeFromBasket] = function () {
 
         if ( blockAddingToBasket) return;
         countBasketElments(1);
-        let mrpImageElement = e.target.parentElement;
-        const mrpCheckboxElement = mrpImageElement.firstElementChild;
+        let mrpImageElement = e.target.parentElement.parentElement;
+        const mrpCheckboxElement = e.target;
         mrpImageElement = mrpImageElement.parentElement.removeChild(mrpImageElement);
-        mrpCheckboxElement.innerHTML = 'check_circle';
+        mrpCheckboxElement.src = "./img/radio_button_checked.svg";
         mrpCheckboxElement.insertAdjacentHTML(
             'afterend',
-            `<span class="custom-control-container">
-            <p class="arrow left"><i></i></p><p class="arrow right"><i></i></p>
-            </span>`//<span class="custom-position-indicator">0</span>
+            `<img src="./img/arrow_back.svg">
+            <img src="./img/arrow_forward.svg">`
         )
-        mrpCheckboxElement.nextElementSibling.firstElementChild.onclick = moveBackwardMRPElementInBasket;
-        mrpCheckboxElement.nextElementSibling.lastElementChild.onclick = moveForwardMRPElementInBasket;
+        mrpCheckboxElement.nextElementSibling.onclick = moveBackwardMRPElementInBasket;
+        mrpCheckboxElement.nextElementSibling.nextElementSibling.onclick = moveForwardMRPElementInBasket;
+        //debugger;
         mrpCheckboxElement.onclick = handleCustomCheckBoxUncheck;
         basketImagesGrid.appendChild(mrpImageElement);
     }
@@ -181,40 +191,91 @@ function displayLazyLoadingBoxes(e) {
     e.target.parentElement.style.display = "block";
 }
 // dodanie obrazow pobranych z MRP api do siatki
-function lazyAppendImagesToGrid(imagesArray) {
+ const lazyAppendImagesToGrid = function () {
     const selectImagesGrid = document.getElementById('select-images-grid');
+    return async function (imagesArray) {
+        
+        imagesArray.forEach( (el) => {
+            const mainDiv = document.createElement('div');
+            mainDiv.insertAdjacentHTML('beforeend',
+                `<span class="custom-control-container">
+                <img class="custom-checkbox" src="./img/radio_button_unchecked.svg">
+                </span>
+                <p>${el.name}</p>
+                <p>${el.earth_date}</p>`
+            );//<span class="custom-checkbox"><span class="material-icons">radio_button_unchecked</span></span>
+            mainDiv.classList.add('mrp-api-image')
     
-    imagesArray.forEach( (el) => {
-        const mainDiv = document.createElement('div');
-        mainDiv.insertAdjacentHTML('beforeend',
-            `<span><span class="material-icons custom-checkbox">radio_button_unchecked</span></span>
-            <p>${el.name}</p>
-            <p>${el.earth_date}</p>`
-        );
-        mainDiv.classList.add('mrp-api-image')
+            // opzonione ladowanie i wyswieltanie po zaladowaniu
+            let bgImg = new Image();
+            bgImg.onload = function(e){
+                mainDiv.style.display = 'grid';
+                mainDiv.style.backgroundImage = /* bgImg; */'url(' + bgImg.src + ')';
+                bgImg = null;
+            };
+            bgImg.src = el.img_src;
+            mainDiv.onclick = () => { 
+                openModal(el.img_src); 
+            };
+            mainDiv.firstElementChild.firstElementChild.onclick = addToBasket;
+    
+            selectImagesGrid.appendChild(mainDiv);
+        })
+    }
+ }();
 
-        // opzonione ladowanie i wyswieltanie po zaladowaniu
-        let bgImg = new Image();
-        bgImg.onload = function(e){
-            mainDiv.style.display = 'grid';
-            mainDiv.style.backgroundImage = /* bgImg; */'url(' + bgImg.src + ')';
-            bgImg = null;
-        };
-        bgImg.src = el.img_src;
-        mainDiv.onclick = () => { 
-            openModal(el.img_src); 
-        };
-        mainDiv.firstElementChild.onclick = addToBasket;
 
-        selectImagesGrid.appendChild(mainDiv);
+// usuniecie nie potrzebnych obrazow w celu zwolnienia pamieci
+async function lazyRemoveImagesFromGrid(parentOfElementsToRemove) {
+    Array.from(parentOfElementsToRemove.children).forEach( el => {
+        parentOfElementsToRemove.removeChild(el);
     })
+
 }
 
-function lazyRemoveImagesFromGrid(params) {
-    
+function startScreenSaver(imagesUrlArray) {
+    const screenSaverConatiner = document.getElementById('screen-saver-container-1');
+    screenSaverConatiner.style.display = 'grid';
+    // Array.from(screenSaverConatiner.children).forEach( (el,index) => {
+    //     el.src = imagesUrlArray[Math.floor(Math.random()*(numberOfImagesToStartGrid -1))];
+    //     el.style.animation
+    // })
+    const screenSaverConatinerChildreen = screenSaverConatiner.children;
+    let counter = 0;
+
+    let timerID;
+    const addImageToConatiner = () => {
+        const el = screenSaverConatinerChildreen[counter];
+        const randomImageNumber = Math.floor(Math.random()*(numberOfImagesToStartGrid -1));
+        el.src = imagesUrlArray[randomImageNumber];
+        el.style.animation = `screen-saver-initial ${screenSaverInitialAnimationDurationTime}s linear 0s 1 reverse `;
+        
+        counter++;
+        if (counter === screenSaverConatinerChildreen.length - 1) {
+            clearInterval(timerID);
+        }
+    };
+    timerID = setInterval( addImageToConatiner, 
+        screenSaverInitialAnimationDurationTime*2000 + screenSaverInitialAnimationOffsetTime*1000);
+
+    // const timerID = setTimeout( addImageToConatiner, screenSaverAnimationDurationTime*1000);
+    // const addImageToConatiner = () => {
+    //     const el = screenSaverConatinerChildreen[counter];
+    //     el.src = imagesUrlArray[Math.floor(Math.random()*(numberOfImagesToStartGrid -1))];
+    //     el.style.animation = `screen-saver-initial ${viewPageAniamtionDuration*0.5}s linear 0s 1 normal `;
+    //     setTimeout( ()=> {
+    //         el.style.animation = `screen-saver-initial ${viewPageAniamtionDuration*0.5}s linear 0s 1 reverse `;
+    //         counter++;
+    //         if (counter !== screenSaverConatinerChildreen.length - 1) {
+    //             setTimeout( addImageToConatiner, screenSaverAnimationDurationTime*500);
+    //         }
+    //     }
+    //     ,screenSaverAnimationDurationTime*500)
+
+    // };
 }
 
-
+// pobieranie z mrp oraz ich asynchroncizne dodawanie do strony
 const processQueryForMRPApi = function (appendImagesToGridFunction) {
     
     // funkcja pobierajaca obrazy z apod api
@@ -233,13 +294,17 @@ const processQueryForMRPApi = function (appendImagesToGridFunction) {
         })
         .then( res =>  res.json() )
         .then( res => {
-            return res.photos.map( (obj) => { 
+            const cutedData = res.photos.map( (obj) => { 
                 return { 
                     "img_src": obj.img_src,
                     "earth_date": obj.earth_date,
                     "name": obj.rover.name
                 }
             })
+            return { 
+                page: page,
+                data: cutedData
+            }
         })
         .catch( err => {
             console.error(err);
@@ -251,20 +316,36 @@ const processQueryForMRPApi = function (appendImagesToGridFunction) {
     }
 
     const getEveryPageForQuery = async (queryDate,rover,camera) => {
-        let pageCount = 1;
-        let result = await getDataFromMRPApi(queryDate,rover,camera);
-        appendImagesToGridFunction(result);
-        
-        while ( result.length !== 0 && result.length % 24 === 0) {
-            pageCount++;
-            result = await getDataFromMRPApi(queryDate,rover,camera,pageCount);
-            appendImagesToGridFunction(result);
-        }
 
-        return result;
+        const getNextPage = async (pageCount) => {
+            getDataFromMRPApi(queryDate,rover,camera,pageCount)
+            .then( res => {
+                appendImagesToGridFunction(res.data);
+                if ( res.data.length !== 0 && res.data.length % 24 === 0) {
+                    getNextPage(queryDate,rover,camera,res.page + 1)
+                }
+            });
+        }
+        getDataFromMRPApi(queryDate,rover,camera)
+            .then( res => {
+                appendImagesToGridFunction(res.data);
+                if ( res.data.length !== 0 && res.data.length % 24 === 0) {
+                    getNextPage(res.page + 1)
+                }
+            });
+
+        //appendImagesToGridFunction(result);
+        
+        // while ( result.length !== 0 && result.length % 24 === 0) {
+        //     pageCount++;
+        //     getDataFromMRPApi(queryDate,rover,camera,pageCount)
+        //     .then( res => appendImagesToGridFunction(result));
+        // }
+
+        // return result;
     }  
 
-    return function (dateFrom,dateTo,rovers,cameras) {
+    return async function (dateFrom,dateTo,rovers,cameras) {
         if (!( dateFrom instanceof Date &&
             dateTo instanceof Date &&
             rovers instanceof Array &&
@@ -272,12 +353,18 @@ const processQueryForMRPApi = function (appendImagesToGridFunction) {
         ) return;
         const queryDate = new Date(dateFrom.getTime());
 
-        rovers.forEach(rover => {
-            cameras.forEach(camera => {
+        // rovers.forEach(rover => {
+        //     cameras.forEach( async camera => {
+        //         await getEveryPageForQuery( queryDate,rover,camera)
+        //         .catch( err => console.error(err) )
+        //     });
+        // });
+        for (const rover of rovers) {
+            for (const camera of cameras) {
                 getEveryPageForQuery( queryDate,rover,camera)
                 .catch( err => console.error(err) )
-            });
-        });
+            }
+        }
     
         while (queryDate.getDate() !== dateTo.getDate() ||
             queryDate.getMonth() !== dateTo.getMonth() ||
@@ -285,12 +372,18 @@ const processQueryForMRPApi = function (appendImagesToGridFunction) {
         ) {
             incrementQueryDate(queryDate);
     
-            rovers.forEach(rover => {
-                cameras.forEach(camera => {
+            // rovers.forEach(rover => {
+            //     cameras.forEach( await async camera => {
+            //         await getEveryPageForQuery( queryDate,rover,camera)
+            //         .catch( err => console.error(err) )
+            //     });
+            // });
+            for (const rover of rovers) {
+                for (const camera of cameras) {
                     getEveryPageForQuery( queryDate,rover,camera)
                     .catch( err => console.error(err) )
-                });
-            });
+                }
+            }
         }
     }
 }(lazyAppendImagesToGrid)
@@ -303,12 +396,12 @@ async function toggleViews() {
         showViewElement = document.getElementById('showView');
     
         if (  window.getComputedStyle(queryViewElement, null).display === 'block' ) {
-            queryViewElement.style.animation = `toggleViewAniamtion ${viewPageAniamtionDuration}s 1 normal both`;     
+            queryViewElement.style.animation = `toggleViewAniamtion ${viewPageAniamtionDuration}s linear 0s 1 normal both`;     
 
             setTimeout( () => {
                 queryViewElement.style.display = 'none';
                 showViewElement.style.display = 'block';
-                showViewElement.style.animation = `toggleViewAniamtion ${viewPageAniamtionDuration}s 1 reverse both`;
+                showViewElement.style.animation = `toggleViewAniamtion ${viewPageAniamtionDuration}s linear 0s 1 reverse both`;
                 
                 setTimeout( () => {
                     queryViewElement.style.animation = '';
@@ -318,12 +411,12 @@ async function toggleViews() {
                 
             },viewPageAniamtionDuration*1000)
         } else {
-            showViewElement.style.animation = `toggleViewAniamtion ${viewPageAniamtionDuration}s 1 both`;
+            showViewElement.style.animation = `toggleViewAniamtion ${viewPageAniamtionDuration}s linear 0s 1 normal both`;
             
             setTimeout( () => {
                 showViewElement.style.display = 'none';
                 queryViewElement.style.display = 'block';
-                queryViewElement.style.animation = `toggleViewAniamtion ${viewPageAniamtionDuration}s 1 reverse both`;
+                queryViewElement.style.animation = `toggleViewAniamtion ${viewPageAniamtionDuration}s linear 0s 1 reverse both`;
                 
                 setTimeout( () => {
                     showViewElement.style.animation = '';

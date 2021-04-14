@@ -42,20 +42,11 @@
     // });
 }
 
-
-{
-    // const selectImagesGrid = document.getElementById('selectImagesGrid');
-    // Array(20).fill().forEach( (el,ind) => {
-    //     selectImagesGrid.insertAdjacentHTML(
-    //         'beforeend',
-    //         `<div></div>`
-    //         )
-    // })
-}
-
-// otwieranie/zamykanie wiodku koszyka
+// otwieranie/zamykanie widoku koszyka
 {
     const openBasketButton = document.getElementById('open-basket-button');
+    document.getElementById('checkout-basket-button').setAttribute('disabled','');
+    document.getElementById('clear-basket-button').setAttribute('disabled','');
     const basketElement = document.getElementById('basket');
 
     const openBasket = () => {
@@ -68,8 +59,23 @@
         openBasketButton.innerHTML = "Open Basket";
         openBasketButton.onclick = openBasket;
     }
-    openBasketButton.onclick = openBasket;
+    openBasketButton.onclick = openBasket;  
 
+}
+
+{
+    (async () => {
+        const [screenWidth,screenHeight] = [ window.innerWidth , window.innerHeight];
+        const screenSaverConatiner = document.getElementById('screen-saver-container-1')
     
-
+        const numberOfImages = Math.round(screenWidth / screenSaverImageSize) * Math.round(screenHeight / screenSaverImageSize);
+    
+        console.log(numberOfImages);
+        for (let index = 0; index < numberOfImages; index++) {
+            const img = document.createElement('img');
+            img.alt = " ";
+            //img.src = "http://mars.jpl.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/01004/opgs/edr/fcam/FLB_486615455EDR_F0481570FHAZ00323M_.JPG"
+            screenSaverConatiner.appendChild(img);   
+        }
+    })();
 }
