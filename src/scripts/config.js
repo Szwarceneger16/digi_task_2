@@ -1,4 +1,4 @@
-const searchMarsRoversCapturedPhotos = 'searchMarsRoversCapturedPhotos',
+const searchMarsRoversCapturedPhotos = 'search-mars-rovers-captured-photos',
     nasaKeyApi = 'NpRGSKyi5LzJO3uckC1UabCrScL8MJjWVgQehtBz',
     viewPageAniamtionDuration = 1, // seconds
     screenSaverImageSize = 128, // pixels

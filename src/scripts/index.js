@@ -1,12 +1,12 @@
 'use strict';
 
-document.getElementById('searchMarsRoversCapturedPhotosFormSubmitButton').addEventListener(
+document.getElementById('search-mars-rovers-captured-photos-form-submit-button').addEventListener(
     'click', 
     valdiateForm
 );
 
 // dodanie eventu do przelaczania pomiedzy stronami
-document.getElementById('toogleViewButton').addEventListener(
+document.getElementById('toogle-view-button').addEventListener(
     'click', 
     async (e) => {
         e.target.setAttribute('disabled',"");
@@ -16,8 +16,8 @@ document.getElementById('toogleViewButton').addEventListener(
 ); 
 
 const openModal = function () {
-    const showView = document.getElementById('showView');
-    const modalElement = document.getElementById('myModal');
+    const showView = document.getElementById('show-view');
+    const modalElement = document.getElementById('main-mrpimage-modal');
     const img = modalElement.firstElementChild.firstElementChild;
 
     const openModal = (url) => {
@@ -55,10 +55,10 @@ function valdiateForm() {
     toggleViews().then( () => form.reset() )
     
     processQueryForMRPApi(
-        formElements['takenDateFrom'].valueAsDate,
-        formElements['takenDateTo'].valueAsDate,
-        Array.from(formElements['roverType'].selectedOptions).map( el => el.value ),
-        Array.from(formElements['cameraType'].selectedOptions).map( el => el.value )
+        formElements['taken-date-from'].valueAsDate,
+        formElements['taken-date-to'].valueAsDate,
+        Array.from(formElements['rover-type'].selectedOptions).map( el => el.value ),
+        Array.from(formElements['camera-type'].selectedOptions).map( el => el.value )
     )
     
 }
@@ -231,10 +231,9 @@ async function lazyRemoveImagesFromGrid(parentOfElementsToRemove) {
 
 }
 
-function startScreenSaver(imagesUrlArray) {
+const startScreenSaver = function () {
     const screenSaverConatiner = document.getElementById('screen-saver-container-1');
-    screenSaverConatiner.style.display = 'grid';
-    document.body.style.overflow = 'hidden';
+    let imagesUrlArray;
 
     let actualGridSize = {
         rows: Math.ceil(window.innerHeight/screenSaverImageSize),
@@ -245,7 +244,7 @@ function startScreenSaver(imagesUrlArray) {
 
     const screenSaverConatinerChildreen = screenSaverConatiner.children;
     let counter = 0;
-    let addImageToConatinerTimerID,randomImageAnimateTimerID;
+    let addImageToConatinerTimerID = undefined,randomImageAnimateTimerID;
 
     const windowSizeChangeHandler = (e) => {
         //console.log(Math.floor(window.innerHeight/128),Math.floor(window.innerWidth/128))
@@ -270,14 +269,17 @@ function startScreenSaver(imagesUrlArray) {
         }
         const subtractionNumberOfImages = numberOfImages - actualGridSize.numberOfImages;
 
-        if (subtractionNumberOfImages > 0 && addImageToConatinerTimerID === undefined) {
+        if (subtractionNumberOfImages > 0) {
             actualGridSize.numberOfImages = numberOfImages;
             for (let index = 0; index < subtractionNumberOfImages; index++) {
-                const randomImageNumber = Math.floor(Math.random()*(numberOfImagesToStartGrid -1));
                 const img = document.createElement('img');
                 img.alt = " ";
-                img.style.animation = `screen-saver ${screenSaverAnimationDurationTime*0.5}s linear 0s 0 normal`;
-                img.src = imagesUrlArray[randomImageNumber];
+                if ( typeof addImageToConatinerTimerID === 'string') {
+                    const randomImageNumber = Math.floor(Math.random()*(numberOfImagesToStartGrid -1));
+                    img.src = imagesUrlArray[randomImageNumber];
+                }
+                //img.style.animation = `screen-saver ${screenSaverAnimationDurationTime*0.5}s linear 0s 0 normal`;
+                
                 screenSaverConatiner.appendChild(img);   
             }
         } else if (subtractionNumberOfImages < 0) {
@@ -296,13 +298,13 @@ function startScreenSaver(imagesUrlArray) {
         previousRandomAnimatedElement = el;
         const randomImageNumber = Math.floor(Math.random()*(numberOfImagesToStartGrid -1));
         
-        el.style.animation = `screen-saver ${screenSaverAnimationDurationTime*0.5}s linear 0s 1 normal both`;
-        setTimeout( () => {
+        el.style.animation = `screen-saver ${screenSaverAnimationDurationTime*0.5}s linear 0s 2 alternate both`;
+        el.style.onanimatioend =  () => {
             el.src = imagesUrlArray[randomImageNumber];
-            el.style.animationDirection = 'reverse';
             el.style.animationIterationCount = 2;
+            el.style.onanimatioend = null;
 
-        }, screenSaverAnimationDurationTime*500)
+        }
         //console.log( 'Row:' + Math.floor(randomImage/actualGridSize.rows), 'Row:' + Math.floor(randomImage%actualGridSize.rows, el)  )
     }
 
@@ -315,7 +317,7 @@ function startScreenSaver(imagesUrlArray) {
         counter++;
         if (counter >= screenSaverConatinerChildreen.length ) {
             clearInterval(addImageToConatinerTimerID);
-            addImageToConatinerTimerID = undefined;
+            addImageToConatinerTimerID = "";
             
             randomImageAnimateTimerID = setInterval(
                 randomImageAnimate, 
@@ -323,14 +325,20 @@ function startScreenSaver(imagesUrlArray) {
         }
 
     };
-    addImageToConatinerTimerID = setInterval( 
-        addImageToConatiner, 
-        screenSaverInitialAnimationDurationTime*1000 + screenSaverInitialAnimationOffsetTime*1000
-    );
-
+    
     window.onresize = windowSizeChangeHandler;
 
-}
+    return function (imagesUrls) {
+        screenSaverConatiner.style.display = 'grid';
+        document.body.style.overflow = 'hidden';
+        imagesUrlArray = imagesUrls;
+        addImageToConatinerTimerID = setInterval( 
+            addImageToConatiner, 
+            screenSaverInitialAnimationDurationTime*1000 + screenSaverInitialAnimationOffsetTime*1000
+        );
+    }
+
+}();
 
 // pobieranie z mrp oraz ich asynchroncizne dodawanie do strony
 const processQueryForMRPApi = function (appendImagesToGridFunction) {
@@ -449,8 +457,8 @@ const processQueryForMRPApi = function (appendImagesToGridFunction) {
 // animacja przejscia pomiedzy formualrzem a kalendarzem
 async function toggleViews() {
     return new Promise(function(resolve, reject) {
-        const queryViewElement = document.getElementById('queryView'),
-        showViewElement = document.getElementById('showView');
+        const queryViewElement = document.getElementById('create-query-view'),
+        showViewElement = document.getElementById('show-view');
     
         if (  window.getComputedStyle(queryViewElement, null).display === 'block' ) {
             queryViewElement.style.animation = `toggleViewAniamtion ${viewPageAniamtionDuration}s linear 0s 1 normal both`;     

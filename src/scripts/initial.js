@@ -6,38 +6,38 @@
 
     const roverTypes = ['Curiosity','Opportunity','Spirit'];
     roverTypes.forEach( el => {
-        formElement.roverType.insertAdjacentHTML('beforeend', 
+        formElement['rover-type'].insertAdjacentHTML('beforeend', 
         `<option value='${el.toLowerCase()}'>${el}</option>`)
     })
     
     const roverCameras = ['FHAZ','RHAZ','NAVCAM'];
     roverCameras.forEach( el => {
-        formElement.cameraType.insertAdjacentHTML('beforeend', 
+        formElement['camera-type'].insertAdjacentHTML('beforeend', 
         `<option value='${el.toLowerCase()}'>${el}</option>`)
     })
 
     // ustawienie maksymalenj daty do dzis
-    formElement.takenDateFrom.setAttribute(
+    formElement['taken-date-from'].setAttribute(
         'max',
         new Date().toISOString().split("T")[0]
     );
-    formElement.takenDateTo.setAttribute(
+    formElement['taken-date-to'].setAttribute(
         'max',
         new Date().toISOString().split("T")[0]
     );
     // ustawienie minimalnej daty dla zakresu do
-    formElement.takenDateFrom.addEventListener('change', (e) => {
-        formElement.takenDateTo.setAttribute(
+    formElement['taken-date-from'].addEventListener('change', (e) => {
+        formElement['taken-date-to'].setAttribute(
             "min",
             e.target.valueAsDate.toISOString().split("T")[0]
         )
     } )
 
-    formElement['takenDateFrom'].valueAsDate = new Date(2021,3,4);
-    formElement['takenDateTo'].valueAsDate = new Date(2021,3,9);
-    formElement['roverType'].selectedIndex = 0;
-    formElement['cameraType'].selectedIndex = 0;
-    // Array.from(formElement['cameraType'].options).forEach( el => {
+    formElement['taken-date-from'].valueAsDate = new Date(2021,3,4);
+    formElement['taken-date-to'].valueAsDate = new Date(2021,3,9);
+    formElement['rover-type'].selectedIndex = 0;
+    formElement['camera-type'].selectedIndex = 0;
+    // Array.from(formElement['camera-type'].options).forEach( el => {
     //     el.selected = true;
     // });
 }

@@ -18,12 +18,6 @@ body {
 	font-size: 20px;
 }
 
-@media only screen and (min-width: 600px) {
-	.main-button {
-		font-size: 16px;
-	}
-}
-
 .main-button:disabled {
 	background: #2e2d2b;
 	color: rgb(189, 189, 189);
@@ -34,12 +28,12 @@ body {
 	color: #fff;
 }
 
-#toogleViewButton:disabled:hover {
+#toogle-view-button:disabled:hover {
 	background: #2e2d2b;
 	color: rgb(189, 189, 189);
 }
 
-#queryView {
+#create-query-view {
     margin: auto;
     width: min-content;
     --set-font-size: 1.0em;
@@ -49,19 +43,19 @@ body {
 	margin-top: 5vh;
 }
 
-.formField {
+.form-field {
     display: grid;
     grid-template-columns: 120px 220px;
     grid-template-rows: min-content min-content;
     grid-gap: 5px;
 }
 
-#searchMarsRoversCapturedPhotos label {
+#search-mars-rovers-captured-photos label {
     align-self: center;
     
 }
 
-#searchMarsRoversCapturedPhotos .errorMessage {
+#search-mars-rovers-captured-photos .error-message {
     align-self: flex-start;
     justify-self: start;
     grid-column-start: 2;
@@ -70,12 +64,12 @@ body {
 	padding: 5px 0px;
 }
 
-#searchMarsRoversCapturedPhotos .input-field-image {
+#search-mars-rovers-captured-photos .input-field-image {
     outline: none;
     align-self: center;
 }
 
-#searchMarsRoversCapturedPhotos select {
+#search-mars-rovers-captured-photos select {
 	height: 100%;
 }
 
@@ -90,22 +84,22 @@ body {
 	outline: none;
 }
 
-#searchMarsRoversCapturedPhotos span.required{
+#search-mars-rovers-captured-photos span.required{
 	color:red;
 }
-#searchMarsRoversCapturedPhotos input:focus{
+#search-mars-rovers-captured-photos input:focus{
 	border: 2px solid rgb(4, 0, 255);
 }
 
-#searchMarsRoversCapturedPhotos .valid{
+#search-mars-rovers-captured-photos .valid{
 	border: 2px solid rgb(68, 216, 0);
 }
 
-#searchMarsRoversCapturedPhotos .invalid{
+#search-mars-rovers-captured-photos .invalid{
 	border: 2px solid rgb(255, 0, 0);
 }
 
-.formField button{
+.form-field button{
 	grid-column: span 2;
 }
 
@@ -119,3 +113,9 @@ body {
         opacity: 0;
 	}
   }
+
+@media only screen and (min-width: 600px) {
+	.main-button {
+		font-size: 16px;
+	}
+}
