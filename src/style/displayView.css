@@ -255,3 +255,7 @@
         font-size: 1.5em;
     }
 }
+
+img[src=""] {
+    visibility: hidden;
+}

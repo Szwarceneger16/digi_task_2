@@ -32,14 +32,6 @@
             e.target.valueAsDate.toISOString().split("T")[0]
         )
     } )
-
-    formElement['taken-date-from'].valueAsDate = new Date(2021,3,4);
-    formElement['taken-date-to'].valueAsDate = new Date(2021,3,9);
-    formElement['rover-type'].selectedIndex = 0;
-    formElement['camera-type'].selectedIndex = 0;
-    // Array.from(formElement['camera-type'].options).forEach( el => {
-    //     el.selected = true;
-    // });
 }
 
 // otwieranie/zamykanie widoku koszyka
@@ -64,17 +56,17 @@
 }
 
 {
-    const screenSaverConatiner = document.getElementById('screen-saver-container-1');
-    let actualGridSize = {
-        rows: Math.ceil(window.innerHeight/screenSaverImageSize),
-        columns: Math.ceil(window.innerWidth/screenSaverImageSize),
-        numberOfImages: 0
-    }
-    actualGridSize.numberOfImages = actualGridSize.rows * actualGridSize.columns;
-    screenSaverConatiner.style.gridTemplateRows = `repeat(${actualGridSize.rows},${100/actualGridSize.rows}%)`;
-    screenSaverConatiner.style.gridTemplateColumns = `repeat(${actualGridSize.columns},${100/actualGridSize.columns}%)`;
-
+    // utworzenie wstepne siatki obrazow dla wygaszacza ekranu 
     (async () => {
+        const screenSaverConatiner = document.getElementById('screen-saver-container-1');
+        let actualGridSize = {
+            rows: Math.ceil(window.innerHeight/screenSaverImageSize),
+            columns: Math.ceil(window.innerWidth/screenSaverImageSize),
+            numberOfImages: 0
+        }
+        actualGridSize.numberOfImages = actualGridSize.rows * actualGridSize.columns;
+        screenSaverConatiner.style.gridTemplateRows = `repeat(${actualGridSize.rows},${100/actualGridSize.rows}%)`;
+        screenSaverConatiner.style.gridTemplateColumns = `repeat(${actualGridSize.columns},${100/actualGridSize.columns}%)`;
         const [screenWidth,screenHeight] = [ window.innerWidth , window.innerHeight];
         
         const numberOfImages = Math.ceil(screenWidth / screenSaverImageSize) * Math.ceil(screenHeight / screenSaverImageSize);
@@ -83,6 +75,7 @@
         for (let index = 0; index < numberOfImages; index++) {
             const img = document.createElement('img');
             img.alt = " ";
+            img.src = "";
             //img.src = "http://mars.jpl.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/01004/opgs/edr/fcam/FLB_486615455EDR_F0481570FHAZ00323M_.JPG"
             screenSaverConatiner.appendChild(img);   
         }

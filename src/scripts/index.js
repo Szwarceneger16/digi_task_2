@@ -1,5 +1,6 @@
 'use strict';
 
+// dodanie eventu dla przycisku do obslugi formualrza
 document.getElementById('search-mars-rovers-captured-photos-form-submit-button').addEventListener(
     'click', 
     valdiateForm
@@ -15,6 +16,7 @@ document.getElementById('toogle-view-button').addEventListener(
     }, false
 ); 
 
+// obsluga otworzenia i zamkniecia modalu powiekszajacego fotografie
 const openModal = function () {
     const showView = document.getElementById('show-view');
     const modalElement = document.getElementById('main-mrpimage-modal');
@@ -54,6 +56,7 @@ function valdiateForm() {
 
     toggleViews().then( () => form.reset() )
     
+    // pobranie wszytskich obrazow dla podanych danych
     processQueryForMRPApi(
         formElements['taken-date-from'].valueAsDate,
         formElements['taken-date-to'].valueAsDate,
@@ -74,6 +77,7 @@ const [addToBasket,removeFromBasket] = function () {
     let blockAddingToBasket = false;
     window.basketElementsCounter = basketElementsCounter;
 
+    // przesuniecie o jedna pozycje w przod elementu w koszyku
     const moveForwardMRPElementInBasket = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -90,6 +94,7 @@ const [addToBasket,removeFromBasket] = function () {
             basketImagesGrid.insertBefore(movedElement,newNextSiblingElement);
         }
     }
+    // przesuniecie o jedna pozycje wstecz elementu w koszyku
     const moveBackwardMRPElementInBasket = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -102,6 +107,7 @@ const [addToBasket,removeFromBasket] = function () {
         basketImagesGrid.insertBefore(movedElement,newNextSiblingElement);
     }
 
+    // zakacpetowanie ksozyka, start wygaszacza
     checkoutBusketButton.onclick = (e) => {
         lazyRemoveImagesFromGrid(selectImagesGrid);
         const imagesUrl = Array.from(basketImagesGrid.children).map( (el) => {
@@ -111,6 +117,7 @@ const [addToBasket,removeFromBasket] = function () {
         startScreenSaver(imagesUrl);
     }
 
+    // pelne wyczyszczenie koszyka
     clearBusketButton.onclick = (e) => {
         Array.from(basketImagesGrid.children).forEach( (element) => {
             takeFromBasketToSelectGrid(element.firstElementChild.firstElementChild);
@@ -121,6 +128,7 @@ const [addToBasket,removeFromBasket] = function () {
         blockAddingToBasket = false;
     }
 
+    // funckja zliczajaca aktualna ilosc w koszyku , kontoler stanu
     const countBasketElments = (direction) => {
         if( typeof direction !== "number") return;
 
@@ -143,6 +151,7 @@ const [addToBasket,removeFromBasket] = function () {
         }
     } 
 
+    // przeneisienie elementu z koszyka do siatki wyboru
     const takeFromBasketToSelectGrid = (mrpCheckboxElement) => {
         countBasketElments(-1);
         let mrpImageElement = mrpCheckboxElement.parentElement.parentElement;
@@ -153,12 +162,14 @@ const [addToBasket,removeFromBasket] = function () {
         mrpImageElement.firstElementChild.removeChild(mrpCheckboxElement.nextElementSibling);
         selectImagesGrid.appendChild(mrpImageElement);
     }
+    // obsluga odznaczenia checkboxa
     const handleCustomCheckBoxUncheck = (e) => {
         e.preventDefault();
         e.stopPropagation();
 
         takeFromBasketToSelectGrid(e.target);
     }
+    // obsluga zaznaczenia checboxa
     const handleCustomCheckBoxCheck = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -201,14 +212,14 @@ function displayLazyLoadingBoxes(e) {
                 </span>
                 <p>${el.name}</p>
                 <p>${el.earth_date}</p>`
-            );//<span class="custom-checkbox"><span class="material-icons">radio_button_unchecked</span></span>
+            );
             mainDiv.classList.add('mrp-api-image')
     
-            // opzonione ladowanie i wyswieltanie po zaladowaniu
+            // opozonione ladowanie i wyswieltanie po pelnym zaladowaniu obrazu
             let bgImg = new Image();
             bgImg.onload = function(e){
                 mainDiv.style.display = 'grid';
-                mainDiv.style.backgroundImage = /* bgImg; */'url(' + bgImg.src + ')';
+                mainDiv.style.backgroundImage = 'url(' + bgImg.src + ')';
                 bgImg = null;
             };
             bgImg.src = el.img_src;
@@ -231,10 +242,13 @@ async function lazyRemoveImagesFromGrid(parentOfElementsToRemove) {
 
 }
 
+// funkcja uruchamiajaca wygaszacz ekranu
 const startScreenSaver = function () {
     const screenSaverConatiner = document.getElementById('screen-saver-container-1');
+    // tablica url do wybranych obrazow
     let imagesUrlArray;
 
+    // aktualne wymairy siatki z obrazami w wygaszaczu
     let actualGridSize = {
         rows: Math.ceil(window.innerHeight/screenSaverImageSize),
         columns: Math.ceil(window.innerWidth/screenSaverImageSize),
@@ -247,7 +261,6 @@ const startScreenSaver = function () {
     let addImageToConatinerTimerID = undefined,randomImageAnimateTimerID;
 
     const windowSizeChangeHandler = (e) => {
-        //console.log(Math.floor(window.innerHeight/128),Math.floor(window.innerWidth/128))
         const [innerWidth,innerHeight] = [ window.innerWidth , window.innerHeight];
         const [rows,columns] = [
             Math.ceil(innerHeight/screenSaverImageSize),
@@ -274,11 +287,11 @@ const startScreenSaver = function () {
             for (let index = 0; index < subtractionNumberOfImages; index++) {
                 const img = document.createElement('img');
                 img.alt = " ";
+                img.src = "";
                 if ( typeof addImageToConatinerTimerID === 'string') {
                     const randomImageNumber = Math.floor(Math.random()*(numberOfImagesToStartGrid -1));
                     img.src = imagesUrlArray[randomImageNumber];
                 }
-                //img.style.animation = `screen-saver ${screenSaverAnimationDurationTime*0.5}s linear 0s 0 normal`;
                 
                 screenSaverConatiner.appendChild(img);   
             }
@@ -305,10 +318,10 @@ const startScreenSaver = function () {
             el.style.onanimatioend = null;
 
         }
-        //console.log( 'Row:' + Math.floor(randomImage/actualGridSize.rows), 'Row:' + Math.floor(randomImage%actualGridSize.rows, el)  )
     }
 
-    const addImageToConatiner = () => {
+    // poczatkowa aniamcja ladujaca obrazy
+    const addImageToConatinerAniamtion = () => {
         const el = screenSaverConatinerChildreen[counter];
         const randomImageNumber = Math.floor(Math.random()*(numberOfImagesToStartGrid -1));
         el.src = imagesUrlArray[randomImageNumber];
@@ -326,6 +339,7 @@ const startScreenSaver = function () {
 
     };
     
+    // obserwacja zmianu rozmairu okna
     window.onresize = windowSizeChangeHandler;
 
     return function (imagesUrls) {
@@ -333,7 +347,7 @@ const startScreenSaver = function () {
         document.body.style.overflow = 'hidden';
         imagesUrlArray = imagesUrls;
         addImageToConatinerTimerID = setInterval( 
-            addImageToConatiner, 
+            addImageToConatinerAniamtion, 
             screenSaverInitialAnimationDurationTime*1000 + screenSaverInitialAnimationOffsetTime*1000
         );
     }
@@ -376,6 +390,7 @@ const processQueryForMRPApi = function (appendImagesToGridFunction) {
         })
     }
 
+    // funckaj zwiekszajaca date o jeden dzien
     const incrementQueryDate = (queryDate) => {
         queryDate.setDate(queryDate.getDate() + 1);
     }
@@ -399,15 +414,6 @@ const processQueryForMRPApi = function (appendImagesToGridFunction) {
                 }
             });
 
-        //appendImagesToGridFunction(result);
-        
-        // while ( result.length !== 0 && result.length % 24 === 0) {
-        //     pageCount++;
-        //     getDataFromMRPApi(queryDate,rover,camera,pageCount)
-        //     .then( res => appendImagesToGridFunction(result));
-        // }
-
-        // return result;
     }  
 
     return async function (dateFrom,dateTo,rovers,cameras) {
@@ -418,12 +424,7 @@ const processQueryForMRPApi = function (appendImagesToGridFunction) {
         ) return;
         const queryDate = new Date(dateFrom.getTime());
 
-        // rovers.forEach(rover => {
-        //     cameras.forEach( async camera => {
-        //         await getEveryPageForQuery( queryDate,rover,camera)
-        //         .catch( err => console.error(err) )
-        //     });
-        // });
+
         for (const rover of rovers) {
             for (const camera of cameras) {
                 getEveryPageForQuery( queryDate,rover,camera)
@@ -437,12 +438,6 @@ const processQueryForMRPApi = function (appendImagesToGridFunction) {
         ) {
             incrementQueryDate(queryDate);
     
-            // rovers.forEach(rover => {
-            //     cameras.forEach( await async camera => {
-            //         await getEveryPageForQuery( queryDate,rover,camera)
-            //         .catch( err => console.error(err) )
-            //     });
-            // });
             for (const rover of rovers) {
                 for (const camera of cameras) {
                     getEveryPageForQuery( queryDate,rover,camera)
@@ -457,38 +452,46 @@ const processQueryForMRPApi = function (appendImagesToGridFunction) {
 // animacja przejscia pomiedzy formualrzem a kalendarzem
 async function toggleViews() {
     return new Promise(function(resolve, reject) {
-        const queryViewElement = document.getElementById('create-query-view'),
-        showViewElement = document.getElementById('show-view');
+        const createQueryViewElement = document.getElementById('create-query-view'),
+        showViewElement = document.getElementById('show-calendar-view');
     
-        if (  window.getComputedStyle(queryViewElement, null).display === 'block' ) {
-            queryViewElement.style.animation = `toggleViewAniamtion ${viewPageAniamtionDuration}s linear 0s 1 normal both`;     
-
-            setTimeout( () => {
-                queryViewElement.style.display = 'none';
-                showViewElement.style.display = 'block';
-                showViewElement.style.animation = `toggleViewAniamtion ${viewPageAniamtionDuration}s linear 0s 1 reverse both`;
-                
-                setTimeout( () => {
-                    queryViewElement.style.animation = '';
-                    showViewElement.style.animation = '';
-                    resolve()
-                }, viewPageAniamtionDuration*1000);
-                
-            },viewPageAniamtionDuration*1000)
-        } else {
-            showViewElement.style.animation = `toggleViewAniamtion ${viewPageAniamtionDuration}s linear 0s 1 normal both`;
+        if (  window.getComputedStyle(createQueryViewElement, null).display === 'block' ) {
+            // aniamcja wyjsciowa
+            createQueryViewElement.style.animation = `toggleViewAniamtion ${togglePageAniamtionDuration}s 1 normal both`;    
             
-            setTimeout( () => {
-                showViewElement.style.display = 'none';
-                queryViewElement.style.display = 'block';
-                queryViewElement.style.animation = `toggleViewAniamtion ${viewPageAniamtionDuration}s linear 0s 1 reverse both`;
+            //aniamcja wejsciowa
+            createQueryViewElement.onanimationend = () => {
+                createQueryViewElement.style.display = 'none';
+                createQueryViewElement.onanimationend = null;
+                showViewElement.style.display = 'block';
+                showViewElement.style.animation = `toggleViewAniamtion ${togglePageAniamtionDuration}s 1 reverse both`;
                 
-                setTimeout( () => {
+                showViewElement.onanimationend = () => {
+                    createQueryViewElement.style.animation = '';
                     showViewElement.style.animation = '';
-                    queryViewElement.style.animation = '';
-                    resolve()
-                }, viewPageAniamtionDuration*1000);
-            },viewPageAniamtionDuration*1000)
+                    showViewElement.onanimationend = null;
+                    resolve();
+                };
+                
+            };
+        } else {
+            // aniamcja wyjsciowa
+            showViewElement.style.animation = `toggleViewAniamtion ${togglePageAniamtionDuration}s 1 both`;
+            
+            //aniamcja wejsciowa
+            showViewElement.onanimationend = () => {
+                showViewElement.onanimationend = null;
+                showViewElement.style.display = 'none';
+                createQueryViewElement.style.display = 'block';
+                createQueryViewElement.style.animation = `toggleViewAniamtion ${togglePageAniamtionDuration}s 1 reverse both`;
+                
+                createQueryViewElement.onanimationend = () => {
+                    showViewElement.style.animation = '';
+                    createQueryViewElement.style.animation = '';
+                    createQueryViewElement.onanimationend = null;
+                    resolve();
+                };
+            };
         }
     });
 }
