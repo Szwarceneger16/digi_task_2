@@ -14,8 +14,7 @@
     grid-template-columns: repeat(auto-fit, minmax(40vw, 1fr));
     grid-auto-rows: 15vh;
     gap: 5px 5px;
-    place-items: start;
-    place-content: start;
+    place-items: center;
     font-size: 1.5em;
 }
 
@@ -357,10 +356,10 @@ p.arrow i {
     padding: 0px;
     background-color: grey;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+    /* grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); */
     /* grid-auto-columns: 128px; */
     /* grid-template-rows: repeat(auto-fit, minmax(128px, 1fr)); */
-    grid-auto-rows: 128px;
+    /* grid-auto-rows: 128px; */
     place-content: start center;
     place-items: stretch;
     overflow: hidden;
@@ -390,22 +389,18 @@ p.arrow i {
 
 @keyframes screen-saver-initial {
     from {
-        transform: scaleX(1);
-		opacity: 1;
+        transform: scaleX(0);
     }
 	to {
-        transform: scaleX(0);
-        opacity: 0;
+        transform: scaleX(1);
 	}
   }
 
   @keyframes screen-saver {
     from {
-        transform: scale(1);
-		opacity: 1;
+        transform: scaleX(1);
     }
-	to {
-        transform: scale(0);
-        opacity: 0;
+    to {
+        transform: scaleX(0);
 	}
   }

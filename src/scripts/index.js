@@ -21,7 +21,7 @@ const openModal = function () {
     const img = modalElement.firstElementChild.firstElementChild;
 
     const openModal = (url) => {
-        modalElement.style.display = 'block';
+        modalElement.style.display = 'flex';
         showView.classList.add('blur');
         img.src = url;
     }
@@ -148,7 +148,6 @@ const [addToBasket,removeFromBasket] = function () {
         let mrpImageElement = mrpCheckboxElement.parentElement.parentElement;
         mrpImageElement = mrpImageElement.parentElement.removeChild(mrpImageElement);
         mrpCheckboxElement.src = "./img/radio_button_unchecked.svg";
-        //debugger;
         mrpCheckboxElement.onclick = handleCustomCheckBoxCheck;
         mrpImageElement.firstElementChild.removeChild(mrpCheckboxElement.nextElementSibling);
         mrpImageElement.firstElementChild.removeChild(mrpCheckboxElement.nextElementSibling);
@@ -177,7 +176,6 @@ const [addToBasket,removeFromBasket] = function () {
         )
         mrpCheckboxElement.nextElementSibling.onclick = moveBackwardMRPElementInBasket;
         mrpCheckboxElement.nextElementSibling.nextElementSibling.onclick = moveForwardMRPElementInBasket;
-        //debugger;
         mrpCheckboxElement.onclick = handleCustomCheckBoxUncheck;
         basketImagesGrid.appendChild(mrpImageElement);
     }
@@ -236,43 +234,102 @@ async function lazyRemoveImagesFromGrid(parentOfElementsToRemove) {
 function startScreenSaver(imagesUrlArray) {
     const screenSaverConatiner = document.getElementById('screen-saver-container-1');
     screenSaverConatiner.style.display = 'grid';
-    // Array.from(screenSaverConatiner.children).forEach( (el,index) => {
-    //     el.src = imagesUrlArray[Math.floor(Math.random()*(numberOfImagesToStartGrid -1))];
-    //     el.style.animation
-    // })
+    document.body.style.overflow = 'hidden';
+
+    let actualGridSize = {
+        rows: Math.ceil(window.innerHeight/screenSaverImageSize),
+        columns: Math.ceil(window.innerWidth/screenSaverImageSize),
+        numberOfImages: 0
+    }
+    actualGridSize.numberOfImages = actualGridSize.rows * actualGridSize.columns;
+
     const screenSaverConatinerChildreen = screenSaverConatiner.children;
     let counter = 0;
+    let addImageToConatinerTimerID,randomImageAnimateTimerID;
 
-    let timerID;
+    const windowSizeChangeHandler = (e) => {
+        //console.log(Math.floor(window.innerHeight/128),Math.floor(window.innerWidth/128))
+        const [innerWidth,innerHeight] = [ window.innerWidth , window.innerHeight];
+        const [rows,columns] = [
+            Math.ceil(innerHeight/screenSaverImageSize),
+            Math.ceil(innerWidth/screenSaverImageSize)
+        ];
+        const numberOfImages = rows * columns;
+
+        console.log(actualGridSize.rows , 'calcualted rows:'+rows , actualGridSize.columns ,'calcualted cols:'+ columns);
+
+        if ( rows !== actualGridSize.rows) {
+            actualGridSize.rows = rows;
+            screenSaverConatiner.style.gridTemplateRows = `repeat(${rows},${100/rows}%)`;
+
+        }
+        if ( columns !== actualGridSize.columns) {
+            actualGridSize.columns = columns;
+            screenSaverConatiner.style.gridTemplateColumns = `repeat(${columns},${100/columns}%)`;
+
+        }
+        const subtractionNumberOfImages = numberOfImages - actualGridSize.numberOfImages;
+
+        if (subtractionNumberOfImages > 0 && addImageToConatinerTimerID === undefined) {
+            actualGridSize.numberOfImages = numberOfImages;
+            for (let index = 0; index < subtractionNumberOfImages; index++) {
+                const randomImageNumber = Math.floor(Math.random()*(numberOfImagesToStartGrid -1));
+                const img = document.createElement('img');
+                img.alt = " ";
+                img.style.animation = `screen-saver ${screenSaverAnimationDurationTime*0.5}s linear 0s 0 normal`;
+                img.src = imagesUrlArray[randomImageNumber];
+                screenSaverConatiner.appendChild(img);   
+            }
+        } else if (subtractionNumberOfImages < 0) {
+            actualGridSize.numberOfImages = numberOfImages;
+            for (let index = 0; index < Math.abs( subtractionNumberOfImages); index++) {
+                screenSaverConatiner.removeChild(screenSaverConatiner.lastChild);   
+            }
+        }
+    }
+
+    let previousRandomAnimatedElement = null;
+    const randomImageAnimate = () => {
+        if (previousRandomAnimatedElement) previousRandomAnimatedElement.style.animation = '';
+        const randomImage = Math.floor( screenSaverConatinerChildreen.length * Math.random());
+        const el = screenSaverConatinerChildreen[randomImage];
+        previousRandomAnimatedElement = el;
+        const randomImageNumber = Math.floor(Math.random()*(numberOfImagesToStartGrid -1));
+        
+        el.style.animation = `screen-saver ${screenSaverAnimationDurationTime*0.5}s linear 0s 1 normal both`;
+        setTimeout( () => {
+            el.src = imagesUrlArray[randomImageNumber];
+            el.style.animationDirection = 'reverse';
+            el.style.animationIterationCount = 2;
+
+        }, screenSaverAnimationDurationTime*500)
+        //console.log( 'Row:' + Math.floor(randomImage/actualGridSize.rows), 'Row:' + Math.floor(randomImage%actualGridSize.rows, el)  )
+    }
+
     const addImageToConatiner = () => {
         const el = screenSaverConatinerChildreen[counter];
         const randomImageNumber = Math.floor(Math.random()*(numberOfImagesToStartGrid -1));
         el.src = imagesUrlArray[randomImageNumber];
-        el.style.animation = `screen-saver-initial ${screenSaverInitialAnimationDurationTime}s linear 0s 1 reverse `;
+        el.style.animation = `screen-saver-initial ${screenSaverInitialAnimationDurationTime}s linear 0s 1 normal `;
         
         counter++;
-        if (counter === screenSaverConatinerChildreen.length - 1) {
-            clearInterval(timerID);
+        if (counter >= screenSaverConatinerChildreen.length ) {
+            clearInterval(addImageToConatinerTimerID);
+            addImageToConatinerTimerID = undefined;
+            
+            randomImageAnimateTimerID = setInterval(
+                randomImageAnimate, 
+                screenSaverAnimationDurationTime*1000 + screenSaverAnimationOffsetTime*1000);
         }
+
     };
-    timerID = setInterval( addImageToConatiner, 
-        screenSaverInitialAnimationDurationTime*2000 + screenSaverInitialAnimationOffsetTime*1000);
+    addImageToConatinerTimerID = setInterval( 
+        addImageToConatiner, 
+        screenSaverInitialAnimationDurationTime*1000 + screenSaverInitialAnimationOffsetTime*1000
+    );
 
-    // const timerID = setTimeout( addImageToConatiner, screenSaverAnimationDurationTime*1000);
-    // const addImageToConatiner = () => {
-    //     const el = screenSaverConatinerChildreen[counter];
-    //     el.src = imagesUrlArray[Math.floor(Math.random()*(numberOfImagesToStartGrid -1))];
-    //     el.style.animation = `screen-saver-initial ${viewPageAniamtionDuration*0.5}s linear 0s 1 normal `;
-    //     setTimeout( ()=> {
-    //         el.style.animation = `screen-saver-initial ${viewPageAniamtionDuration*0.5}s linear 0s 1 reverse `;
-    //         counter++;
-    //         if (counter !== screenSaverConatinerChildreen.length - 1) {
-    //             setTimeout( addImageToConatiner, screenSaverAnimationDurationTime*500);
-    //         }
-    //     }
-    //     ,screenSaverAnimationDurationTime*500)
+    window.onresize = windowSizeChangeHandler;
 
-    // };
 }
 
 // pobieranie z mrp oraz ich asynchroncizne dodawanie do strony

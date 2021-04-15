@@ -64,11 +64,20 @@
 }
 
 {
+    const screenSaverConatiner = document.getElementById('screen-saver-container-1');
+    let actualGridSize = {
+        rows: Math.ceil(window.innerHeight/screenSaverImageSize),
+        columns: Math.ceil(window.innerWidth/screenSaverImageSize),
+        numberOfImages: 0
+    }
+    actualGridSize.numberOfImages = actualGridSize.rows * actualGridSize.columns;
+    screenSaverConatiner.style.gridTemplateRows = `repeat(${actualGridSize.rows},${100/actualGridSize.rows}%)`;
+    screenSaverConatiner.style.gridTemplateColumns = `repeat(${actualGridSize.columns},${100/actualGridSize.columns}%)`;
+
     (async () => {
         const [screenWidth,screenHeight] = [ window.innerWidth , window.innerHeight];
-        const screenSaverConatiner = document.getElementById('screen-saver-container-1')
-    
-        const numberOfImages = Math.round(screenWidth / screenSaverImageSize) * Math.round(screenHeight / screenSaverImageSize);
+        
+        const numberOfImages = Math.ceil(screenWidth / screenSaverImageSize) * Math.ceil(screenHeight / screenSaverImageSize);
     
         console.log(numberOfImages);
         for (let index = 0; index < numberOfImages; index++) {
@@ -78,4 +87,8 @@
             screenSaverConatiner.appendChild(img);   
         }
     })();
+    
+    
+
+
 }
