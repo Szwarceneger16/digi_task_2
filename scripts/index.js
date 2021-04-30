@@ -453,7 +453,7 @@ const processQueryForMRPApi = function (appendImagesToGridFunction) {
 async function toggleViews() {
     return new Promise(function(resolve, reject) {
         const createQueryViewElement = document.getElementById('create-query-view'),
-        showViewElement = document.getElementById('show-calendar-view');
+        showViewElement = document.getElementById('basket-view');
     
         if (  window.getComputedStyle(createQueryViewElement, null).display === 'block' ) {
             // aniamcja wyjsciowa

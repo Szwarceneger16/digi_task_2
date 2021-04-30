@@ -1,5 +1,5 @@
 const searchMarsRoversCapturedPhotos = 'search-mars-rovers-captured-photos',
-    nasaKeyApi = 'NpRGSKyi5LzJO3uckC1UabCrScL8MJjWVgQehtBz',
+    nasaKeyApi = '7YnczC4xpaqneFnfnNj763DZwejqt0mae3ofAWie',
     togglePageAniamtionDuration = 1, // seconds
     screenSaverImageSize = 128, // pixels
     numberOfImagesToStartGrid = 10,
