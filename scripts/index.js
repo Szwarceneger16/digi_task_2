@@ -268,7 +268,7 @@ const startScreenSaver = function () {
         ];
         const numberOfImages = rows * columns;
 
-        console.log(actualGridSize.rows , 'calcualted rows:'+rows , actualGridSize.columns ,'calcualted cols:'+ columns);
+        //console.log(actualGridSize.rows , 'calcualted rows:'+rows , actualGridSize.columns ,'calcualted cols:'+ columns);
 
         if ( rows !== actualGridSize.rows) {
             actualGridSize.rows = rows;
