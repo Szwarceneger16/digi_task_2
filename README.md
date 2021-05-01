@@ -10,12 +10,12 @@
 ## Order
  I was obligate to do screen saver which use Nasa Api photo from rovers.<br>
  User can select range of data, rovers and camera.<br>
- NExt can select 10 photos from recived from api. <br>
+ Next can select 10 photos from recived from api. <br>
  This photos will be used to screen saver animation.<br>
  
  Source: https://github.com/hellodigers/recruitment-task-junior-frontend-developer-2
  
  ## Technological stack
- * Pure JS ES6 (reqirments of task)
+ * Pure JS ES6 (requirements of task)
  * owns css style and icons
  * google fonts
