@@ -13,7 +13,7 @@ document.getElementById("toogle-view-button").addEventListener(
   "click",
   async (e) => {
     e.target.setAttribute("disabled", "");
-    toggleBasketQueryViews().then(() => e.target.removeAttribute("disabled"));
+    toggleQueryStoreViews().then(() => e.target.removeAttribute("disabled"));
   },
   false
 );

@@ -16,8 +16,11 @@ export class BasketOrderController {
       this.checkoutBusketButton.removeAttribute("disabled");
       return false;
     }
+
     ++this.basketElementsCounter;
-    if (this.basketElementsCounter === 1) {
+    if (this.basketElementsCounter === this.maxImagesOrder) {
+      this.checkoutBusketButton.removeAttribute("disabled");
+    } else if (this.basketElementsCounter === 1) {
       this.clearBusketButton.removeAttribute("disabled");
     }
 
