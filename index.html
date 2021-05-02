@@ -1,111 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="author" content="Szwarc" />
+    <link rel="shortcut icon" href="#" />
+    <!-- Usunięcie favicion error, nie do celów produkcyjncyh  -->
+    <title>Digi Task 2</title>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <meta name="author" content="Szwarc" />
-  <link rel="shortcut icon" href="#" /> <!-- Usunięcie favicion error, nie do celów produkcyjncyh  -->
-  <title>Digi Task 2</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style/queryView.css" />
+    <link rel="stylesheet" href="./style/basket.css" />
+    <link rel="stylesheet" href="./style/toggleView.css" />
+    <link rel="stylesheet" href="./style/storeView.css" />
+    <link rel="stylesheet" href="./style/modal.css" />
+  </head>
 
-  <link rel="stylesheet" href="./style/queryView.css">
-  <link rel="stylesheet" href="./style/basketView.css"> 
-</head>
-
-<body>
-  <div class="navbar">
-    <button id="toogle-view-button" class="main-button" >Toggle View</button>
-  </div>
-
-	<div id='create-query-view' >
-    <form id="search-mars-rovers-captured-photos" name="search-mars-rovers-captured-photos" action="" novalidate>
-
-      <div class="form-field">
-        <label for="taken-date-from">
-          Date from:<span class="required">*</span>
-        </label>
-        <input name="taken-date-from" type="date" class="input-field"
-        required>
-        <div class="error-message"></div>
-      </div>
-      
-      <div class="form-field">
-        <label for="taken-date-to">
-          Date To:<span class="required">*</span>
-        </label>
-        <input name="taken-date-to" type="date" class="input-field" required>
-        <div class="error-message"></div>
-      </div>
-
-      <div class="form-field">
-        <label for="rover-type">
-          Rover:<span class="required">*</span>
-        </label>
-        <select multiple
-          name="rover-type"
-          class="input-field" 
-          required
-          >
-        </select>
-        <div class="error-message"></div>
-      </div>
-
-      <div class="form-field">
-        <label for="camera-type">
-          Camera:<span class="required">*</span>
-        </label>
-        <select multiple
-          name="camera-type" 
-          class="input-field" 
-          required
-          >
-        </select>
-        <div class="error-message"></div>
-      </div>
-
-    </form>
-
-      <div class="form-field">
-            <button id="search-mars-rovers-captured-photos-form-submit-button" class="main-button" >Submit</button>
-      </div>
-    
-
-	</div>
-
-
-  <div id='basket-view' >
-    <div id='select-images-grid' class="mrp-images-grid">
-
+  <body>
+    <div class="navbar">
+      <button id="toogle-view-button" class="main-button">Toggle View</button>
     </div>
 
-    <div class="basket-container">
-      <div class="basket-button-container">
-        <button id="checkout-basket-button" class="main-button" >Checkout</button>
-        <button id="clear-basket-button" class="main-button" >Remove All</button>
-        <button id="open-basket-button" class="main-button">Show Basket</button>
-      </div>
-      <div id="basket" class="basket">
-        <div id="basket-images-grid" class="mrp-images-grid"></div>
+    <div id="create-query-view">
+      <form
+        id="search-mars-rovers-captured-photos"
+        name="search-mars-rovers-captured-photos"
+        action=""
+        novalidate
+      >
+        <div class="form-field">
+          <label for="taken-date-from">
+            Date from:<span class="required">*</span>
+          </label>
+          <input
+            name="taken-date-from"
+            type="date"
+            class="input-field"
+            required
+          />
+          <div class="error-message"></div>
+        </div>
+
+        <div class="form-field">
+          <label for="taken-date-to">
+            Date To:<span class="required">*</span>
+          </label>
+          <input
+            name="taken-date-to"
+            type="date"
+            class="input-field"
+            required
+          />
+          <div class="error-message"></div>
+        </div>
+
+        <div class="form-field">
+          <label for="rover-type">
+            Rover:<span class="required">*</span>
+          </label>
+          <select
+            multiple
+            name="rover-type"
+            class="input-field"
+            required
+          ></select>
+          <div class="error-message"></div>
+        </div>
+
+        <div class="form-field">
+          <label for="camera-type">
+            Camera:<span class="required">*</span>
+          </label>
+          <select
+            multiple
+            name="camera-type"
+            class="input-field"
+            required
+          ></select>
+          <div class="error-message"></div>
+        </div>
+      </form>
+
+      <div class="form-field">
+        <button
+          id="search-mars-rovers-captured-photos-form-submit-button"
+          class="main-button"
+        >
+          Submit
+        </button>
       </div>
     </div>
 
-  </div>
+    <div id="store-view">
+      <div id="select-images-grid" class="mrp-images-grid"></div>
 
-  <div id="main-mrpimage-modal" class="modal">
-    <div class="modal-content">
-      <!-- <span class="modal-close">&times;</span> -->
-      <img >
+      <div class="bottom-fixed-container">
+        <div class="basket-button-container">
+          <button id="checkout-basket-button" class="main-button">
+            Checkout
+          </button>
+          <button id="clear-basket-button" class="main-button">
+            Remove All
+          </button>
+          <button id="open-basket-button" class="main-button">
+            Show Basket
+          </button>
+        </div>
+        <div id="basket" class="basket">
+          <div id="basket-images-grid" class="mrp-images-grid"></div>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div id="screen-saver-container-1" class="screen-saver-container" style="display: none;">
+    <div id="main-mrpimage-modal" class="modal">
+      <div class="modal-content">
+        <!-- <span class="modal-close">&times;</span> -->
+        <img id="modal-image" />
+      </div>
+    </div>
 
-  </div>
-  
-  <script type="text/javascript" src="./scripts/config.js"></script>
-  <script type="text/javascript" src="./scripts/initial.js"></script>
-	<script type="text/javascript" src="./scripts/index.js"></script>
-  
-</body>
+    <div
+      id="screen-saver-container-1"
+      class="screen-saver-container"
+      style="display: none"
+    ></div>
+
+    <script type="text/javascript" src="/scripts/config.js"></script>
+    <script type="module" src="/scripts/index.js"></script>
+  </body>
+</html>
