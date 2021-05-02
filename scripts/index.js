@@ -6,14 +6,8 @@ import { ScreenSaver } from "./screenSaver.js";
 import { fetchMarsPhoto } from "./api/fetchMarsPhotos.js";
 import { valdiateForm } from "./utils/formUtils.js";
 
-import { initFormValues } from "./init/initFormValues.js";
+import "./init/initFormValues.js";
 import { toggleQueryStoreViews } from "./init/initViewsAnimation.js";
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", executeAfterFullDOMLoading);
-} else {
-  executeAfterFullDOMLoading();
-}
 
 const selectImagesGrid = document.getElementById("select-images-grid");
 const storeView = document.getElementById("store-view");
@@ -47,18 +41,15 @@ const processQueryForMRPApi = apiQueryWrapper(
   mrpApiDataLengthForOnePage
 );
 
-function executeAfterFullDOMLoading() {
-  initFormValues();
-  // add event to button for form submittion
-  document
-    .getElementById("search-mars-rovers-captured-photos-form-submit-button")
-    .addEventListener("click", () => {
-      const validateResult = valdiateForm(
-        document.forms[searchMarsRoversCapturedPhotos],
-        processQueryForMRPApi
-      );
-      if (validateResult) {
-        toggleQueryStoreViews();
-      }
-    });
-}
+// add event to button for form submittion
+document
+  .getElementById(searchMarsPhotoFormSubmitButtonName)
+  .addEventListener("click", () => {
+    const validateResult = valdiateForm(
+      document.forms[searchMarsPhotoFormName],
+      processQueryForMRPApi
+    );
+    if (validateResult) {
+      toggleQueryStoreViews();
+    }
+  });

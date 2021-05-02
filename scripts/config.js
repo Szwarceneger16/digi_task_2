@@ -1,4 +1,5 @@
-const searchMarsRoversCapturedPhotos = "search-mars-rovers-captured-photos",
+const searchMarsPhotoFormName = "search-mars-photo-form",
+  searchMarsPhotoFormSubmitButtonName = "search-mars-photo-form-submit",
   nasaKeyApi = "7YnczC4xpaqneFnfnNj763DZwejqt0mae3ofAWie",
   togglePageAniamtionDuration = 1, // seconds
   screenSaverImageSize = 128, // pixels
