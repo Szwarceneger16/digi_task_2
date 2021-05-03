@@ -1,7 +1,7 @@
 import {
   toggleBasketDisplay,
-  clearBasketElements,
-  processOrder,
+  lazyRemoveElementChild,
+  returnOrder,
   moveElementBeetwenGrids,
 } from "../utils/storeUtils.js";
 import { BasketOrderController } from "./BasketOrderController.js";
@@ -11,7 +11,7 @@ import {
 } from "./imageMoveHandler.js";
 import { StoreMoveBetweensGridMixin } from "./StoreMoveBetweensGridMixin.js";
 
-const init = (
+const initBasketCartControls = (
   displayButton,
   clearButton,
   checkoutButton,
@@ -30,13 +30,12 @@ export default class Store extends StoreMoveBetweensGridMixin(
   BasketOrderController
 ) {
   constructor(
-    //elements reference
-    basketElementId, //
-    basketGridElementId, //
-    selectGridElementId, //
-    basketDisplayButtonId, //
-    basketClearButtonId, //
-    basketCheckoutButtonId, //
+    basketContainer,
+    basketImagesGrid,
+    selectImagesGrid,
+    basketDisplayButton,
+    basketClearButton,
+    basketCheckoutButton,
     // handlers
     takeOrderHandler,
     openModalHandler,
@@ -48,15 +47,6 @@ export default class Store extends StoreMoveBetweensGridMixin(
     backwardControlArrowSrc,
     forwardControlArrowSrc
   ) {
-    const basketClearButton = document.getElementById(basketClearButtonId);
-    const basketCheckoutButton = document.getElementById(
-      basketCheckoutButtonId
-    );
-    const basketImagesGrid = document.getElementById(basketGridElementId);
-    const selectImagesGrid = document.getElementById(selectGridElementId);
-    const basketDisplayButton = document.getElementById(basketDisplayButtonId);
-    const basketContainer = document.getElementById(basketElementId);
-
     super([numbersOfImageToOrder, basketClearButton, basketCheckoutButton]);
 
     this.selectImagesGrid = selectImagesGrid;
@@ -70,16 +60,21 @@ export default class Store extends StoreMoveBetweensGridMixin(
 
     const clearBusketHandler = () => {
       this.clearBasket();
-      clearBasketElements(basketImagesGrid, (imageElement) =>
+      const order = returnOrder(basketImagesGrid);
+      order.forEach((imageElement) =>
         moveElementBeetwenGrids(imageElement, selectImagesGrid)
       );
     };
-    const processOrderHandler = () =>
-      processOrder(basketImagesGrid, takeOrderHandler);
+    const processOrderHandler = () => {
+      const order = returnOrder(basketImagesGrid);
+      lazyRemoveElementChild(basketImagesGrid);
+      lazyRemoveElementChild(selectImagesGrid);
+      takeOrderHandler(order);
+    };
     const toggleDisplayHandler = () =>
       toggleBasketDisplay(basketContainer, basketDisplayButton);
 
-    init(
+    initBasketCartControls(
       basketDisplayButton,
       basketClearButton,
       basketCheckoutButton,

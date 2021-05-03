@@ -12,12 +12,6 @@ function swapElements(sourceElement, targetElement) {
   const sourceElementParent = sourceElement.parentElement;
   sourceElementParent.insertBefore(sourceElement, targetElement);
   sourceElementParent.insertBefore(targetElement, sourceElementSibling);
-  // sourceElement.replaceWith(targetElement);
-  // if (elementAfterTarget) {
-  //   sourceElementParent.insertBefore(sourceElement, elementAfterTarget);
-  // } else {
-  //   sourceElementParent.appendChild(sourceElement);
-  // }
 }
 
 function moveImageByPositionNumber(sourceImageContainer, relativePosition) {
@@ -54,14 +48,3 @@ export function moveImageElementForward(imageContainer) {
 export function moveImageElementBackward(imageContainer) {
   moveImageByPositionNumber(imageContainer, -1);
 }
-// function moveImageFromBasket( targetGrid) {
-//     return function (imageContainer) {
-//         if (!countBasketElements(-1)) return false;
-//         moveElementBeetwenGrids(imageContainer, targetGrid);
-//     }
-//   }
-
-//   function moveImageToBasket(imageContainer) {
-//     if (!countBasketElements(-1)) return false;
-//     moveElementBeetwenGrids(imageContainer, basketGrid);
-//   }

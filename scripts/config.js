@@ -1,18 +1,29 @@
-const searchMarsPhotoFormName = "search-mars-photo-form",
-  searchMarsPhotoFormSubmitButtonName = "search-mars-photo-form-submit",
-  nasaKeyApi = "7YnczC4xpaqneFnfnNj763DZwejqt0mae3ofAWie",
-  togglePageAniamtionDuration = 1, // seconds
-  screenSaverImageSize = 128, // pixels
-  numberOfImagesToStartGrid = 10,
-  screenSaverInitialAnimationDurationTime = 0.2, // seconds
-  screenSaverInitialAnimationOffsetTime = 0.2, // seconds
-  screenSaverAnimationDurationTime = 1, // seconds
-  screenSaverAnimationOffsetTime = 1; // seconds
-
+const searchMarsPhotoFormName = "search-mars-photo-form";
+const searchMarsPhotoFormSubmitButtonName = "search-mars-photo-form-submit";
+const screenSaverContainerName = "screen-saver-container-1";
+const selectImagesGridName = "select-images-grid";
+const storeViewName = "store-view";
+const modalContainerName = "main-mrpimage-modal";
+// === ANIMATIONS
+const togglePageAniamtionDuration = 1; // seconds
+const screenSaverImageSize = 128; // pixels
+const screenSaverInitialAnimationName = "screen-saver-initial";
+const screenSaverInitialAnimationTimingFunction = "ease-in";
+const screenSaverAnimationName = "screen-saver";
+const screenSaverAnimationTimingFunction = "ease-in";
+const screenSaverInitialAnimationDurationTime = 0.2; // seconds
+const screenSaverInitialAnimationOffsetTime = 0.2; // seconds
+const screenSaverAnimationDurationTime = 1; // seconds
+const screenSaverAnimationOffsetTime = 1; // seconds
+// === FORM
 const roverCameraTypes = ["FHAZ", "RHAZ", "NAVCAM"];
 const roverTypes = ["Curiosity", "Opportunity", "Spirit"];
 const mrpApiDataLengthForOnePage = 24;
+// === BASKET
+const numberOfImagesToStartGrid = 10;
 const backArrowBasketControlSrc = "./img/arrow_back.svg";
 const forwardArrowBasketControlSrc = "./img/arrow_forward.svg";
 const checkboxCheckSrc = "./img/radio_button_checked.svg";
 const checkboxUncheckSrc = "./img/radio_button_unchecked.svg";
+// === API
+const nasaKeyApi = "7YnczC4xpaqneFnfnNj763DZwejqt0mae3ofAWie";

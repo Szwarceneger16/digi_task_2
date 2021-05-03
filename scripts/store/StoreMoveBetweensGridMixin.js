@@ -33,7 +33,6 @@ export const StoreMoveBetweensGridMixin = (CartController) =>
       const checkBox = event.currentTarget;
       const isChecked = checkBox.classList.contains("check");
       const imageContainer = checkBox.parentElement.parentElement;
-      //console.log(this.backwardControlArrowSrc);
       if (!isChecked) {
         if (!this.addToBasket()) return;
         this.moveElementTo(imageContainer, this.basketImagesGrid);

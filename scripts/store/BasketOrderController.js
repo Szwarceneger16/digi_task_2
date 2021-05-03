@@ -5,13 +5,8 @@ export class BasketOrderController {
     this.clearBusketButton = clearBusketButton;
     this.checkoutBusketButton = checkoutBusketButton;
   }
-  observer(msg) {
-    console.log(msg, this.basketElementsCounter);
-  }
 
   addToBasket() {
-    this.observer("add przed");
-
     if (this.basketElementsCounter === this.maxImagesOrder) {
       this.checkoutBusketButton.removeAttribute("disabled");
       return false;
@@ -24,12 +19,10 @@ export class BasketOrderController {
       this.clearBusketButton.removeAttribute("disabled");
     }
 
-    this.observer("add po");
     return true;
   }
 
   takeFromBasket() {
-    this.observer("sub przed");
     --this.basketElementsCounter;
     if (this.basketElementsCounter === 0) {
       this.clearBusketButton.setAttribute("disabled", "");
@@ -37,7 +30,6 @@ export class BasketOrderController {
       this.checkoutBusketButton.setAttribute("disabled", "");
     }
 
-    this.observer("sub po");
     return true;
   }
 
