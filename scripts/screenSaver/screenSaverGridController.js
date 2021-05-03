@@ -28,13 +28,13 @@ export class ScreenSaverGridController {
       Math.ceil(window.innerWidth / this.imageSize),
     ];
 
-    if (rows !== actualGridSize.rows) {
+    if (rows !== this.actualGridSize.rows) {
       this.actualGridSize.rows = rows;
       this.screenSaverConatiner.style.gridTemplateRows = getGridTemplateStyleAsString(
         rows
       );
     }
-    if (columns !== actualGridSize.columns) {
+    if (columns !== this.actualGridSize.columns) {
       this.actualGridSize.columns = columns;
       this.screenSaverConatiner.style.gridTemplateColumns = getGridTemplateStyleAsString(
         columns
@@ -42,7 +42,7 @@ export class ScreenSaverGridController {
     }
 
     const cells = rows * columns;
-    const cellsNumberDifference = cells - actualGridSize.cells;
+    const cellsNumberDifference = cells - this.actualGridSize.cells;
     this.actualGridSize.cells = cells;
 
     modifyScreenSaverImagesGrid(
