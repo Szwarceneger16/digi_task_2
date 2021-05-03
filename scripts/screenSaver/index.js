@@ -38,7 +38,7 @@ export default class ScreenSaver extends ScreenSaverGridController {
       animationDurationTime * 0.5 +
       "s " +
       animationTimingFunction +
-      " 0s 2 alternate both";
+      " 0s 2 alternate";
   }
 
   randomImageAnimate = () => {
@@ -54,9 +54,6 @@ export default class ScreenSaver extends ScreenSaverGridController {
 
     this.child.onanimationiteration = () => {
       this.child.src = this.imagesUrlsArray[randomImageNumber];
-    };
-    this.child.onanimationend = () => {
-      this.child.style.animation = "";
     };
 
     this.child.style.animation = this.animation;
