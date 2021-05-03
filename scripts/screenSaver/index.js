@@ -50,11 +50,13 @@ export default class ScreenSaver extends ScreenSaverGridController {
       0,
       this.imagesUrlsArray.length
     );
-    this.child.style.animation = "";
     this.child = this.screenSaverConatiner.children[randomImageFromGridNumber];
 
     this.child.onanimationiteration = () => {
       this.child.src = this.imagesUrlsArray[randomImageNumber];
+    };
+    this.child.onanimationend = () => {
+      this.child.style.animation = "";
     };
 
     this.child.style.animation = this.animation;
