@@ -12,7 +12,7 @@ export class ScreenSaverGridController {
   };
   constructor(screenSaverConatiner, imageSize) {
     this.screenSaverConatiner = screenSaverConatiner;
-    createInitialGrid(this.screenSaverConatiner, imageSize);
+    createInitialGrid(screenSaverConatiner, imageSize);
     this.imageSize = imageSize;
     this.actualGridSize.rows = Math.ceil(window.innerHeight / this.imageSize);
     this.actualGridSize.columns = Math.ceil(window.innerWidth / this.imageSize);
@@ -22,7 +22,7 @@ export class ScreenSaverGridController {
     window.onresize = this.windowSizeChangeHandler;
   }
 
-  windowSizeChangeHandler() {
+  windowSizeChangeHandler = () => {
     const [rows, columns] = [
       Math.ceil(window.innerHeight / this.imageSize),
       Math.ceil(window.innerWidth / this.imageSize),
@@ -46,9 +46,10 @@ export class ScreenSaverGridController {
     this.actualGridSize.cells = cells;
 
     modifyScreenSaverImagesGrid(
-      this.images,
+      this.imagesUrlsArray,
       this.screenSaverConatiner,
+      typeof this.randomImageAnimateTimerID === "number",
       cellsNumberDifference
     );
-  }
+  };
 }

@@ -20,22 +20,20 @@ export function getRandomArbitrary(min, max) {
 export function modifyScreenSaverImagesGrid(
   imagesUrlArray,
   screenSaverContainer,
+  appendWithNewImage,
   cellsNumberDifference
 ) {
   if (cellsNumberDifference > 0) {
     for (let index = 0; index < cellsNumberDifference; index++) {
       let newImage;
-      if (typeof addImageToConatinerTimerID === "string") {
-        const randomImageNumber = getRandomArbitrary(
-          0,
-          numberOfImagesToStartGrid
-        );
+      if (appendWithNewImage) {
+        const randomImageNumber = getRandomArbitrary(0, imagesUrlArray.length);
         newImage = createScreenSaverImage(imagesUrlArray[randomImageNumber]);
       } else {
         newImage = createScreenSaverImage();
       }
 
-      screenSaverContainer.appendChild(img);
+      screenSaverContainer.appendChild(newImage);
     }
   } else if (cellsNumberDifference < 0) {
     for (let index = 0; index < Math.abs(cellsNumberDifference); index++) {
