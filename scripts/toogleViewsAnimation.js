@@ -4,14 +4,33 @@
 export function toogleViewsAnimation(
   firstElement,
   secondElement,
-  toggleAnimationName
+  animationInName,
+  aniamtionInDuration,
+  animationOutName = undefined,
+  aniamtionOutDuration = undefined,
+  aniamtionInDirection = "reverse",
+  aniamtionOutDirection = "normal",
+  animationInTimingFunction = "ease-out",
+  animationOutTimingFunction = "ease-in"
 ) {
-  firstElement.style.animationDuration = togglePageAniamtionDuration + "s";
-  secondElement.style.animationDuration = togglePageAniamtionDuration + "s";
-  firstElement.style.animationFillMode = "none";
-  secondElement.style.animationFillMode = "none";
-  firstElement.style.animationIterationCount = 1;
-  secondElement.style.animationIterationCount = 1;
+  const animationIn =
+    animationInName +
+    " " +
+    aniamtionInDuration +
+    "s " +
+    animationInTimingFunction +
+    " 0s 1 " +
+    aniamtionInDirection +
+    " none";
+  const animationOut =
+    (animationOutName || animationInName) +
+    " " +
+    (aniamtionOutDuration || aniamtionInDuration) +
+    "s " +
+    animationOutTimingFunction +
+    " 0s 1 " +
+    aniamtionOutDirection +
+    " none";
 
   return async () => {
     return new Promise(function (resolve, reject) {
@@ -23,9 +42,6 @@ export function toogleViewsAnimation(
         inAnimationElement = firstElement;
         outAnimationElement = secondElement;
       }
-
-      outAnimationElement.style.animationDirection = "normal";
-      inAnimationElement.style.animationDirection = "reverse";
 
       outAnimationElement.onanimationend = () => {
         outAnimationElement.style.display = "none";
@@ -39,8 +55,8 @@ export function toogleViewsAnimation(
         resolve();
       };
 
-      firstElement.style.animationName = toggleAnimationName;
-      secondElement.style.animationName = toggleAnimationName;
+      outAnimationElement.style.animation = animationOut;
+      inAnimationElement.style.animation = animationIn;
     });
   };
 }
