@@ -1,11 +1,6 @@
-const searchMarsPhotoFormName = "search-mars-photo-form";
-const searchMarsPhotoFormSubmitButtonName = "search-mars-photo-form-submit";
-const screenSaverContainerName = "screen-saver-container-1";
-const selectImagesGridName = "select-images-grid";
-const storeViewName = "store-view";
-const modalContainerName = "main-mrpimage-modal";
 // === ANIMATIONS
-const togglePageAniamtionDuration = 1; // seconds
+const togglePageAniamtionDuration = 0.6; // seconds
+const togglePageAniamtionName = "toggleQueryStoreAniamtion";
 const screenSaverImageSize = 128; // pixels
 const screenSaverInitialAnimationName = "screen-saver-initial";
 const screenSaverInitialAnimationTimingFunction = "ease-in";

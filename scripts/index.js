@@ -4,12 +4,13 @@ import { apiQueryWrapper } from "./api/apiQueryWrapper.js";
 import { setModalHandler } from "./modal.js";
 import { fetchMarsPhoto } from "./api/fetchMarsPhotos.js";
 import { valdiateForm } from "./utils/formUtils.js";
+import { toogleViewsAnimation } from "./toogleViewsAnimation.js";
 
 import "./init/initFormValues.js";
-import { toggleQueryStoreViews } from "./init/initViewsAnimation.js";
 
-const storeView = document.getElementById(storeViewName);
-const modalContainer = document.getElementById(modalContainerName);
+const storeView = document.getElementById("store-view");
+const createQueryViewElement = document.getElementById("create-query-view");
+const modalContainer = document.getElementById("main-mrpimage-modal");
 const openModal = setModalHandler(storeView, modalContainer);
 
 const store = new Store(
@@ -29,7 +30,7 @@ const store = new Store(
 );
 
 const screenSaver = new ScreenSaver(
-  document.getElementById(screenSaverContainerName),
+  document.getElementById("screen-saver-container-1"),
   screenSaverInitialAnimationName,
   screenSaverInitialAnimationDurationTime,
   screenSaverInitialAnimationOffsetTime,
@@ -39,6 +40,22 @@ const screenSaver = new ScreenSaver(
   screenSaverAnimationOffsetTime,
   screenSaverAnimationTimingFunction,
   screenSaverImageSize
+);
+
+const toggleQueryStoreViews = toogleViewsAnimation(
+  createQueryViewElement,
+  storeView,
+  togglePageAniamtionName,
+  togglePageAniamtionDuration
+);
+
+document.getElementById("toogle-view-button").addEventListener(
+  "click",
+  async (e) => {
+    e.target.setAttribute("disabled", "");
+    toggleQueryStoreViews().then(() => e.target.removeAttribute("disabled"));
+  },
+  false
 );
 
 function startScreenSaver(imagesContainersArray) {
@@ -55,12 +72,12 @@ const processQueryForMRPApi = apiQueryWrapper(
   mrpApiDataLengthForOnePage
 );
 
-// add event to button for form submittion
+// add event to button to form submittion
 document
-  .getElementById(searchMarsPhotoFormSubmitButtonName)
+  .getElementById("search-mars-photo-form-submit")
   .addEventListener("click", () => {
     const validateResult = valdiateForm(
-      document.forms[searchMarsPhotoFormName],
+      document.forms["search-mars-photo-form"],
       processQueryForMRPApi
     );
     if (validateResult) {

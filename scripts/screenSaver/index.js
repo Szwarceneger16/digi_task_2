@@ -74,7 +74,7 @@ export default class ScreenSaver extends ScreenSaverGridController {
 
       this.randomImageAnimateTimerID = setInterval(
         this.randomImageAnimate,
-        this.animationDurationTime * 1000 * 2 + this.animationOffsetTime * 1000
+        this.animationDurationTime * 1000 + this.animationOffsetTime * 1000
       );
     } else {
       this.child = this.child.nextElementSibling;
