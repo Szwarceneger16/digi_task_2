@@ -2,7 +2,7 @@
  
  Solution for recruiment task for Junior F/E Dev Applicants at Digers
  
-## [DEMO](https://szwarceneger16.github.io/digi_task_2/)
+## [DEMO](https://git.io/J3gAk)
  
 ![obraz](https://user-images.githubusercontent.com/45860671/116774370-7ca78a80-aa5c-11eb-95b8-d027f302f769.png)
 
